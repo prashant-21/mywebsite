@@ -25,12 +25,15 @@ export default function WhatsAppDemo() {
   useEffect(() => {
     let currentIdx = 0;
     const interval = setInterval(() => {
-      if (currentIdx < sequence.length) {
-        setVisibleMsgs(prev => [...prev, sequence[currentIdx].id]);
-        currentIdx++;
-      } else {
+      if (currentIdx >= sequence.length) {
         clearInterval(interval);
+        return;
       }
+      currentIdx++;
+      setVisibleMsgs(prev => {
+        if (prev.length >= sequence.length) return prev;
+        return [...prev, sequence[prev.length].id];
+      });
     }, 1500);
 
     return () => clearInterval(interval);
